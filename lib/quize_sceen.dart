@@ -4,7 +4,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+
 class QuizScreen extends StatefulWidget {
+  final bool resetQuiz;
+  QuizScreen({required this.resetQuiz});
+
   @override
   _QuizScreenState createState() => _QuizScreenState();
 }
@@ -25,9 +29,16 @@ class _QuizScreenState extends State<QuizScreen> {
     _loadState();
   }
 
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
   Future<void> _loadQuestions() async {
     try {
-      String data = await DefaultAssetBundle.of(context).loadString("assets/quetions.json");
+      String data = await DefaultAssetBundle.of(context)
+          .loadString("assets/quetions.json");
       setState(() {
         _questions = json.decode(data);
         _isLoading = false;
@@ -44,11 +55,22 @@ class _QuizScreenState extends State<QuizScreen> {
 
   Future<void> _loadState() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _currentQuestionIndex = prefs.getInt('currentQuestionIndex') ?? 0;
-      _score = prefs.getInt('score') ?? 0;
-      _timeRemaining = prefs.getInt('timeRemaining') ?? 600;
-    });
+    if (widget.resetQuiz) {
+      await prefs.clear();
+      setState(() {
+        _currentQuestionIndex = 0;
+        _score = 0;
+        _timeRemaining = 600;
+      });
+    } else {
+      setState(() {
+        _currentQuestionIndex =
+            prefs.getInt('currentQuestionIndex') ?? 0;
+        _score = prefs.getInt('score') ?? 0;
+        _timeRemaining =
+            prefs.getInt('timeRemaining') ?? 600;
+      });
+    }
     _startTimer();
   }
 
@@ -68,7 +90,11 @@ class _QuizScreenState extends State<QuizScreen> {
         _saveState();
       } else {
         timer.cancel();
-        _showScore();
+        if (_currentQuestionIndex < _questions.length - 1) {
+          _goToNextQuestion();
+        } else {
+          _showScore();
+        }
       }
     });
   }
@@ -100,8 +126,9 @@ class _QuizScreenState extends State<QuizScreen> {
     Navigator.of(context).pop();
   }
 
-  void _answerQuestion(String selectedOption) {
-    if (_questions[_currentQuestionIndex]['answer'] == selectedOption) {
+  void _answerQuestion(String? selectedOption) {
+    if (selectedOption != null &&
+        _questions[_currentQuestionIndex]['answer'] == selectedOption) {
       _score++;
     }
     if (_currentQuestionIndex < _questions.length - 1) {
@@ -113,6 +140,25 @@ class _QuizScreenState extends State<QuizScreen> {
       _showScore();
     }
     _saveState();
+  }
+
+
+  void _goToNextQuestion() {
+    if (_currentQuestionIndex < _questions.length - 1) {
+      setState(() {
+        _currentQuestionIndex++;
+      });
+      _saveState();
+    }
+  }
+
+  void _goToPreviousQuestion() {
+    if (_currentQuestionIndex > 0) {
+      setState(() {
+        _currentQuestionIndex--;
+      });
+      _saveState();
+    }
   }
 
   @override
@@ -163,7 +209,11 @@ class _QuizScreenState extends State<QuizScreen> {
             children: [
               SizedBox(height: 40),
               Text(
-                'Time remaining: ${(_timeRemaining / 60).floor().toString().padLeft(2, '0')}:${(_timeRemaining % 60).toString().padLeft(2, '0')}',
+                'Time remaining: ${(_timeRemaining / 60).floor()
+                    .toString()
+                    .padLeft(2, '0')}:${(_timeRemaining % 60)
+                    .toString()
+                    .padLeft(2, '0')}',
                 style: TextStyle(fontSize: 24, color: Colors.white),
                 textAlign: TextAlign.center,
               ),
@@ -189,10 +239,12 @@ class _QuizScreenState extends State<QuizScreen> {
                         onPressed: () => _answerQuestion(option),
                         child: Text(option),
                         style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.blueAccent, backgroundColor: Colors.white,
+                          foregroundColor: Colors.blueAccent,
+                          backgroundColor: Colors.white,
                           padding: EdgeInsets.symmetric(vertical: 15),
                           textStyle: TextStyle(fontSize: 18),
-                          minimumSize: Size(double.infinity, 50), // Set fixed size
+                          minimumSize: Size(
+                              double.infinity, 50), // Set fixed size
                         ),
                       ),
                     ),
@@ -200,6 +252,40 @@ class _QuizScreenState extends State<QuizScreen> {
                   ],
                 );
               }).toList(),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ElevatedButton(
+                    onPressed: _goToPreviousQuestion,
+                    child: Text('Previous'),
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.blueAccent, backgroundColor: Colors.white,
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 15),
+                      textStyle: TextStyle(fontSize: 18),
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_currentQuestionIndex < _questions.length - 1) {
+                        _goToNextQuestion();
+                      } else {
+                        _answerQuestion(null); // or you can handle this case accordingly
+                      }
+                    },
+                    child: Text(_currentQuestionIndex < _questions.length - 1
+                        ? 'Next'
+                        : 'Submit'),
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.blueAccent, backgroundColor: Colors.white,
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 15),
+                      textStyle: TextStyle(fontSize: 18),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
@@ -207,3 +293,4 @@ class _QuizScreenState extends State<QuizScreen> {
     );
   }
 }
+
