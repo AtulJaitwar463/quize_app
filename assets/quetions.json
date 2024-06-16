@@ -1,0 +1,53 @@
+[
+
+  {
+    "question": "What is Flutter?",
+    "options": ["A web browser", "A mobile development framework", "A programming language", "A database"],
+    "answer": "A mobile development framework"
+  },
+  {
+    "question": "Who developed Flutter?",
+    "options": ["Apple", "Google", "Facebook", "Microsoft"],
+    "answer": "Google"
+  },
+  {
+    "question": "What language is used to write Flutter apps?",
+    "options": ["Java", "Kotlin", "Dart", "Swift"],
+    "answer": "Dart"
+  },
+  {
+    "question": "Which widget is used for layouts in Flutter?",
+    "options": ["Container", "Column", "Row", "All of the above"],
+    "answer": "All of the above"
+  },
+  {
+    "question": "Which command is used to create a new Flutter project?",
+    "options": ["flutter init", "flutter create", "flutter start", "flutter new"],
+    "answer": "flutter create"
+  },
+  {
+    "question": "What is the purpose of a StatefulWidget in Flutter?",
+    "options": ["To create a static UI", "To create an interactive UI that can change over time", "To manage network requests", "To access device hardware"],
+    "answer": "To create an interactive UI that can change over time"
+  },
+  {
+    "question": "How do you add a dependency in a Flutter project?",
+    "options": ["Edit the main.dart file", "Edit the pubspec.yaml file", "Edit the index.html file", "Edit the AndroidManifest.xml file"],
+    "answer": "Edit the pubspec.yaml file"
+  },
+  {
+    "question": "Which of the following is a method to pass data to a StatefulWidget?",
+    "options": ["setState()", "final variable", "constructor", "InheritedWidget"],
+    "answer": "constructor"
+  },
+  {
+    "question": "Which widget is used to display a list of items in Flutter?",
+    "options": ["Column", "Row", "Stack", "ListView"],
+    "answer": "ListView"
+  },
+  {
+    "question": "Which widget in Flutter is used to capture user input?",
+    "options": ["Text", "Icon", "TextField", "Scaffold"],
+    "answer": "TextField"
+  }
+]
