@@ -27,7 +27,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
   Future<void> _loadQuestions() async {
     try {
-      String data = await DefaultAssetBundle.of(context).loadString("assets/questions.json");
+      String data = await DefaultAssetBundle.of(context).loadString("assets/quetions.json");
       setState(() {
         _questions = json.decode(data);
         _isLoading = false;
@@ -151,7 +151,7 @@ class _QuizScreenState extends State<QuizScreen> {
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.blueAccent, Colors.lightBlueAccent],
+            colors: [Colors.purpleAccent, Colors.pinkAccent],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),

@@ -26,9 +26,9 @@
     "answer": "flutter create"
   },
   {
-    "question": "What is the purpose of a StatefulWidget in Flutter?",
-    "options": ["To create a static UI", "To create an interactive UI that can change over time", "To manage network requests", "To access device hardware"],
-    "answer": "To create an interactive UI that can change over time"
+    "question": "A sequence of asynchronous Flutter events is known as a:",
+    "options": ["Flow", "Stream", "Series", "Current"],
+    "answer": "Stream"
   },
   {
     "question": "How do you add a dependency in a Flutter project?",

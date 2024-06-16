@@ -10,7 +10,7 @@ class StartScreen extends StatelessWidget {
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.blueAccent, Colors.lightBlueAccent],
+            colors: [Colors.purpleAccent, Colors.pinkAccent],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
